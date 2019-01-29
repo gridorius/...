@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>game</title>
+    <link rel="stylesheet" href="/style/main.css">
+  </head>
+  <body>
+    <div class="entity player">
+
+    </div>
+    <script src="js/Animation.js"></script>
+    <script type="text/javascript">
+      let player = document.getElementsByClassName('player')[0];
+      let animation = new Animation('knight/idle/');
+      animation.onload = function(){
+        animation.setFor(player);
+        setInterval(function(){
+          animation.nextFrame();
+          animation.draw();
+        }, 50);
+      }
+    </script>
+  </body>
+</html>
