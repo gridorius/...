@@ -13,13 +13,13 @@
     <script type="text/javascript">
       let player = document.getElementsByClassName('player')[0];
       let animation = new Animation('knight/idle/');
-      animation.onload = function(){
+      animation.onload.then(function(){
         animation.setFor(player);
         setInterval(function(){
           animation.nextFrame();
           animation.draw();
         }, 50);
-      }
+      })
     </script>
   </body>
 </html>

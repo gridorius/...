@@ -3,12 +3,8 @@ class Animation{
     this.frame = 0;
     this.url = url;
     this.sprite = `/SpriteGenerator.php?path=${url}&action=sprite`;
-    fetch(`/SpriteGenerator.php?path=${url}&action=info`).then(r=>r.json()).then(info=>{
-      this.info = info
-      this.onload();
-    });
+    this.onload = fetch(`/SpriteGenerator.php?path=${url}&action=info`).then(r=>r.json()).then(info=>this.info = info);
     this.showInfoMode = false;
-    this.onload = function(){};
     this.onend = function(){};
     this.onframe = function(){};
   }
