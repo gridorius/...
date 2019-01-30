@@ -6,6 +6,7 @@ class GameOjbect{
     this.health = new Regen();
     this.mana = new Regen();
     this.aniamtion = null;
+    this.action = new Action().end();
     this.health.onover = this.ondeath;
     this.ondeath = function(){};
 

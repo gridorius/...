@@ -1,5 +1,6 @@
 class Game{
-  constructor(){
+  constructor(context){
+    this.context = context;
     this.frame = 0;
     this.objects = [];
     this.keys = [];
@@ -11,6 +12,7 @@ class Game{
   }
 
   addObject(object){
+    object.setContext(this.context);
     this.objects.push(object);
   }
 
