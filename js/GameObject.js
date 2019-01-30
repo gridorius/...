@@ -2,6 +2,7 @@ class GameObject{
   constructor(name, mover){
     this.name = name;
     this.mover = mover;
+    this.inverse = false;
 
     this.health = new Regen();
     this.mana = new Regen();
@@ -16,14 +17,18 @@ class GameObject{
 
   setAnimation(animation){
     this.animation = animation;
-    animation.setFor(this.element);
+    animation.setFor(this);
   }
 
   setContext(context){
     context.appendChild(this.element);
   }
 
-  update(keys, object){
+  update(key, objects){
+    this.element.style.left = this.mover.location.x + 'px';
+    console.clear()
+    console.log(this.mover.location.x)
+    console.log(this.mover.acceleration)
     this.mover.update();
     this.health.update();
     this.mana.update();
@@ -31,8 +36,8 @@ class GameObject{
 
   draw(){
     if(this.animation){
-      this.animation.nextFrame();
-      this.animation.draw();
+      this.animation.nextFrame(this);
+      this.animation.draw(this);
     }
   }
 }
@@ -42,5 +47,12 @@ class Player extends GameObject{
     super('player', new Mover(new Vector(100, 100)));
     this.health = new Regen(100, 1, 100);
     this.mana = new Regen(100, 3, 100);
+  }
+
+  update(key, objects){
+    if(key[65]) this.mover.appendForce(new Vector(-3, 0));
+    if(key[68]) this.mover.appendForce(new Vector(3, 0));
+    this.inverse = key[65] && key[68] ? this.inverse : (!key[65] && !key[68] ? this.inverse : (key[65]));
+    super.update(key, objects);
   }
 }

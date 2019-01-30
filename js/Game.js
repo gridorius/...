@@ -18,7 +18,7 @@ class Game{
 
   start(){
     this.frame = 0;
-    let idle = new Animation('knight/idle/', 0.3);
+    let idle = new Animation('knight/run/', 0.3);
     let player = new Player();
     this.addObject(player);
     idle.onload.then(()=>{
