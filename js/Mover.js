@@ -13,7 +13,7 @@ class Mover{
   update(){
     this.velocity.add(this.acceleration);
     this.location.add(this.velocity);
-    this.velocity.x -= this.velocity.x*10/100;
+    this.velocity.x -= this.velocity.x*5/100;
     this.acceleration.zero();
     return this;
   }

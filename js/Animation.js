@@ -9,7 +9,7 @@ class Animation{
   }
 
   nextFrame(object){
-    object.frame += this.speed;
+    object.frame += this.speed();
     if(object.frame>=this.info.sprites)
       object.frame %= this.info.sprites;
     return this;
@@ -26,7 +26,7 @@ class Animation{
   }
 
   setFor(object){
-    object.frame = 0;
+    //object.frame = 0;
     object.element.style.backgroundImage = `url(${this.sprite})`;
     object.element.style.width = this.info.newwidth + 'px';
     object.element.style.height = this.info.newheight + 'px';

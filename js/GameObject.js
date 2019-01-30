@@ -3,9 +3,12 @@ class GameObject{
     this.name = name;
     this.mover = mover;
     this.inverse = false;
+    this.speed = 1;
+    this.frame = 0;
 
     this.health = new Regen();
     this.mana = new Regen();
+    this.animations = new Map();
     this.aniamtion = null;
     this.action = new Action().end();
     this.health.onover = this.ondeath;
@@ -36,6 +39,7 @@ class GameObject{
 
   draw(){
     if(this.animation){
+      console.log(this.frame);
       this.animation.nextFrame(this);
       this.animation.draw(this);
     }
@@ -50,9 +54,10 @@ class Player extends GameObject{
   }
 
   update(key, objects){
-    if(key[65]) this.mover.appendForce(new Vector(-3, 0));
-    if(key[68]) this.mover.appendForce(new Vector(3, 0));
+    if(key[65]) this.mover.appendForce(new Vector(-this.speed, 0));
+    if(key[68]) this.mover.appendForce(new Vector(this.speed, 0));
     this.inverse = key[65] && key[68] ? this.inverse : (!key[65] && !key[68] ? this.inverse : (key[65]));
+    key[65] && key[68] ? this.setAnimation(this.animations.get('idle')) : (!key[65] && !key[68] ? this.setAnimation(this.animations.get('idle')) : this.setAnimation(this.animations.get('sprint')));
     super.update(key, objects);
   }
 }

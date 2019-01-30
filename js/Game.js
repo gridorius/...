@@ -18,8 +18,11 @@ class Game{
 
   start(){
     this.frame = 0;
-    let idle = new Animation('knight/run/', 0.3);
     let player = new Player();
+    let sprint = new Animation('knight/sprint/', ()=>Math.abs(player.mover.velocity.x / 25));
+    let idle = new Animation('knight/idle/', ()=>0.3);
+    player.animations.set('idle', idle);
+    player.animations.set('sprint', sprint);
     this.addObject(player);
     idle.onload.then(()=>{
       player.setAnimation(idle);
