@@ -1,4 +1,4 @@
-class GameOjbect{
+class GameObject{
   constructor(name, mover){
     this.name = name;
     this.mover = mover;
@@ -12,6 +12,11 @@ class GameOjbect{
 
     this.element = document.createElement('div');
     this.element.className = 'entity';
+  }
+
+  setAnimation(animation){
+    this.animation = animation;
+    animation.setFor(this.element);
   }
 
   setContext(context){
@@ -29,5 +34,13 @@ class GameOjbect{
       this.animation.nextFrame();
       this.animation.draw();
     }
+  }
+}
+
+class Player extends GameObject{
+  constructor(){
+    super('player', new Mover(new Vector(100, 100)));
+    this.health = new Regen(100, 1, 100);
+    this.mana = new Regen(100, 3, 100);
   }
 }

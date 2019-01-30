@@ -1,4 +1,9 @@
 .entity{
   position: absolute;
   bottom: 0;
+  overflow: hidden;
+}
+
+.entity > img{
+  position: absolute;
 }

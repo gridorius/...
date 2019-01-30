@@ -18,12 +18,17 @@ class Game{
 
   start(){
     this.frame = 0;
-    this.render();
+    let idle = new Animation('knight/idle/', 0.3);
+    let player = new Player();
+    this.addObject(player);
+    idle.onload.then(()=>{
+      player.setAnimation(idle);
+      this.render();
+    });
   }
 
   render(){
     if(this.ended)return;
-
     for(let object of this.objects){
       object.update(this.keys, this.objects);
       object.draw();

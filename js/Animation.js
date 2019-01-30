@@ -1,10 +1,15 @@
 class Animation{
-  constructor(url){
+  constructor(url, speed){
+    this.speed = speed;
     this.frame = 0;
     this.url = url;
     this.sprite = `/SpriteGenerator.php?path=${url}&action=sprite`;
     this.onload = fetch(`/SpriteGenerator.php?path=${url}&action=info`).then(r=>r.json()).then(info=>this.info = info);
     this.showInfoMode = false;
+
+    this.img = new Image();
+    this.img.src = this.sprite;
+
     this.onend = function(){};
     this.onframe = function(){};
   }
@@ -25,10 +30,10 @@ class Animation{
   }
 
   nextFrame(){
-    this.frame++;
+    this.frame += this.speed;
     this.onframe(this.frame);
-    if(this.frame%this.info.sprites == 0){
-      this.frame = 0;
+    if(this.frame>=this.info.sprites){
+      this.frame %= this.info.sprites;
       this.onend();
     }
     if(this.showInfoMode)this.showInfo();
@@ -37,7 +42,8 @@ class Animation{
 
   draw(){
     if(this.element)
-      this.element.style.backgroundPosition = -this.frame*this.info.newwidth + 'px';
+      // this.img.style.left = (-this.frame | 0)*this.info.newwidth + 'px';
+      this.element.style.backgroundPosition = (-this.frame | 0)*this.info.newwidth + 'px';
   }
 
   update(){
@@ -46,6 +52,7 @@ class Animation{
 
   setFor(element){
     this.element = element;
+    // element.appendChild(this.img);
     element.style.backgroundImage = `url(${this.sprite})`;
     element.style.width = this.info.newwidth + 'px';
     element.style.height = this.info.newheight + 'px';
