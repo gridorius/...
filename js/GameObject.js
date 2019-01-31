@@ -8,7 +8,6 @@ class GameObject{
 
     this.health = new Regen();
     this.mana = new Regen();
-    this.animations = new Map();
     this.aniamtion = null;
     this.action = new Action().end();
     this.health.onover = this.ondeath;
@@ -18,20 +17,22 @@ class GameObject{
     this.element.className = 'entity';
   }
 
+  keyevent(code, type, keys){
+
+  }
+
   setAnimation(animation){
     this.animation = animation;
     animation.setFor(this);
   }
 
-  setContext(context){
-    context.appendChild(this.element);
+  setGame(game){
+    this.game = game;
+    game.context.appendChild(this.element);
   }
 
   update(key, objects){
     this.element.style.left = this.mover.location.x + 'px';
-    console.clear()
-    console.log(this.mover.location.x)
-    console.log(this.mover.acceleration)
     this.mover.update();
     this.health.update();
     this.mana.update();
@@ -39,7 +40,6 @@ class GameObject{
 
   draw(){
     if(this.animation){
-      console.log(this.frame);
       this.animation.nextFrame(this);
       this.animation.draw(this);
     }
@@ -53,11 +53,14 @@ class Player extends GameObject{
     this.mana = new Regen(100, 3, 100);
   }
 
+  keyevent(type, code, keys){
+
+  }
+
   update(key, objects){
     if(key[65]) this.mover.appendForce(new Vector(-this.speed, 0));
     if(key[68]) this.mover.appendForce(new Vector(this.speed, 0));
     this.inverse = key[65] && key[68] ? this.inverse : (!key[65] && !key[68] ? this.inverse : (key[65]));
-    key[65] && key[68] ? this.setAnimation(this.animations.get('idle')) : (!key[65] && !key[68] ? this.setAnimation(this.animations.get('idle')) : this.setAnimation(this.animations.get('sprint')));
     super.update(key, objects);
   }
 }

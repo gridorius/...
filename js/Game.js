@@ -6,26 +6,34 @@ class Game{
     this.keys = [];
     this.ended = false;
     this.paused = false;
+    this.animations = {};
 
-    window.addEventListener('keydown', e=>this.keys[e.keyCode] = true);
-    window.addEventListener('keyup', e=>this.keys[e.keyCode] = false);
+    window.addEventListener('keydown', e=>this.keyevent(e.ceyKode, true));
+    window.addEventListener('keyup', e=>this.keyevent(e.ceyKode, false));
+  }
+
+  keyevent(code, type){
+    this.keys[code] = type;
+    for(let object of this.objects)
+      object.keyevent(type, code, this.keys);
   }
 
   addObject(object){
-    object.setContext(this.context);
+    object.setGame(this);
     this.objects.push(object);
   }
 
   start(){
     this.frame = 0;
     let player = new Player();
-    let sprint = new Animation('knight/sprint/', ()=>Math.abs(player.mover.velocity.x / 25));
-    let idle = new Animation('knight/idle/', ()=>0.3);
-    player.animations.set('idle', idle);
-    player.animations.set('sprint', sprint);
+    let panim = this.animations.player = {};
+
+    panim.sprint = new Animation('knight/sprint/', ()=>Math.abs(player.mover.velocity.x / 25));
+    panim.idle = new Animation('knight/idle/', ()=>0.3);
+
     this.addObject(player);
-    idle.onload.then(()=>{
-      player.setAnimation(idle);
+    panim.idle.onload.then(()=>{
+      player.setAnimation(panim.idle);
       this.render();
     });
   }
