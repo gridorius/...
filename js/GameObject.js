@@ -5,11 +5,12 @@ class GameObject{
     this.inverse = false;
     this.speed = 1;
     this.frame = 0;
+    this.actions = {};
 
     this.health = new Regen();
     this.mana = new Regen();
     this.aniamtion = null;
-    this.action = new Action().end();
+    this.action = new Action(0).end();
     this.health.onover = this.ondeath;
     this.ondeath = function(){};
 
@@ -17,7 +18,7 @@ class GameObject{
     this.element.className = 'entity';
   }
 
-  keyevent(code, type, keys){
+  keyevent(key, keys){
 
   }
 
@@ -51,10 +52,12 @@ class Player extends GameObject{
     super('player', new Mover(new Vector(100, 100)));
     this.health = new Regen(100, 1, 100);
     this.mana = new Regen(100, 3, 100);
+
+    this.actions.attack = new Action(0);
   }
 
-  keyevent(type, code, keys){
-
+  keyevent(key, keys){
+    key.is(65).then(()=>this.setAnimation(this.game.animations.player.sprint));
   }
 
   update(key, objects){

@@ -5,11 +5,6 @@ class Action{
     this.ended = false;
   }
 
-  setAction(action){
-    this.action = action;
-    return this;
-  }
-
   nextFrame(){
     this.framesAfterCast++;
   }

@@ -8,14 +8,15 @@ class Game{
     this.paused = false;
     this.animations = {};
 
-    window.addEventListener('keydown', e=>this.keyevent(e.ceyKode, true));
-    window.addEventListener('keyup', e=>this.keyevent(e.ceyKode, false));
+    window.addEventListener('keydown', e=>this.keyevent(e.keyCode, true));
+    window.addEventListener('keyup', e=>this.keyevent(e.keyCode, false));
   }
 
   keyevent(code, type){
+    if(this.keys[code] == type)return;
     this.keys[code] = type;
     for(let object of this.objects)
-      object.keyevent(type, code, this.keys);
+      object.keyevent(new Key(code, type), this.keys);
   }
 
   addObject(object){
