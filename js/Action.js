@@ -15,6 +15,7 @@ class Action{
 
   start(){
     if(this.framesAfterCast < this.cd) return false;
+    this.framesAfterCast = 0;
     this.ended = false;
     return true;
   }

@@ -3,6 +3,11 @@ class Mover{
     this.location = location;
     this.velocity = velocity;
     this.acceleration = acceleration;
+    this.speedLimit = null;
+  }
+
+  setSpeedLimit(limit){
+    this.speedLimit = limit;
   }
 
   appendForce(force){
@@ -11,9 +16,15 @@ class Mover{
   }
 
   update(){
-    this.velocity.add(this.acceleration);
+    if(this.speedLimit && Math.abs(this.velocity.x) >= this.speedLimit);
+    else this.velocity.add(this.acceleration);
     this.location.add(this.velocity);
-    this.velocity.x -= this.velocity.x*5/100;
+
+    if(!this.acceleration.x){
+      this.velocity.x *= 0.8;
+      if(Math.abs(this.velocity.x) < 2) this.velocity.x = 0;
+    }
+    
     this.acceleration.zero();
     return this;
   }

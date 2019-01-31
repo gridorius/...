@@ -1,5 +1,6 @@
 .entity{
   position: absolute;
+  transform-origin: left;
   bottom: 0;
   overflow: hidden;
 }

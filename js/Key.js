@@ -4,9 +4,9 @@ class Key{
     this.type = type;
   }
 
-  is(code){
+  is(code, type){
     return new Promise((resolve, reject)=>{
-      if(code == this.code)resolve(this.type);
+      if(code == this.code && this.type == type)resolve(this.type);
     });
   }
 }

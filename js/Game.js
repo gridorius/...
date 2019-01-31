@@ -26,17 +26,17 @@ class Game{
 
   start(){
     this.frame = 0;
-    let player = new Player();
+    let player = new Player(new Mover(new Vector(500)));
     let panim = this.animations.player = {};
-
-    panim.sprint = new Animation('knight/sprint/', ()=>Math.abs(player.mover.velocity.x / 25));
-    panim.idle = new Animation('knight/idle/', ()=>0.3);
+    let start = -80;
+    panim.sprint = new Animation('knight/sprint/', ()=>Math.abs(player.mover.velocity.x / 25)).setOffset(start - 50, 0);
+    panim.idle = new Animation('knight/idle/', ()=>0.3).setOffset(start, 0);
+    panim.attack = new Animation('knight/attack1/', ()=>0.3).setOffset(start - 40, 0);
 
     this.addObject(player);
-    panim.idle.onload.then(()=>{
-      player.setAnimation(panim.idle);
-      this.render();
-    });
+    Promise.all([panim.sprint.onload, panim.idle.onload, panim.attack.onload]).then(()=>this.render())
+
+
   }
 
   render(){
