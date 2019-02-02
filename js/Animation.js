@@ -2,8 +2,8 @@ class Animation{
   constructor(url, speed){
     this.speed = speed;
     this.url = url;
-    this.sprite = `/SpriteGenerator.php?path=${url}&action=sprite`;
-    this.onload = fetch(`/SpriteGenerator.php?path=${url}&action=info`).then(r=>r.json()).then(info=>this.info = info);
+    this.sprite = `/SpriteGenerator.php?path=${url}&action=3`;
+    this.onload = fetch(`/SpriteGenerator.php?path=${url}&action=2`).then(r=>r.json()).then(info=>this.info = info);
     this.img = new Image();
     this.img.src = this.sprite;
     this.x = 0;
@@ -41,7 +41,7 @@ class Animation{
   }
 
   update(){
-    fetch(`/SpriteGenerator.php?path=${this.url}&action=update`);
+    fetch(`/SpriteGenerator.php?path=${this.url}&action=1`);
   }
 
   setFor(object){

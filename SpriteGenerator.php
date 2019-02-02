@@ -1,68 +1,60 @@
 <?php
 class SpriteGenerator{
-  private $path;
-  private $images = [];
+  private $frames = [];
   public function __construct($path){
-    $this->path = $path;
     foreach(glob($path.'*') as $file)
       if(getimagesize($file) && $file != $path.'sprite.png')
-        $this->images[] = $file;
+        $this->frames[] = $file;
   }
 
-  public function InfoGenerate(){
-    $first = imagecreatefrompng($this->images[0]);
-    $params = [];
-    $w = $params['width'] = imagesx($first);
-    $params['height'] = imagesy($first);
-    $first = imagescale($first, $w*0.2);
-    $params['newwidth'] = imagesx($first);
-    $params['newheight'] = imagesy($first);
-    $params['spritewidth'] = $params['newwidth']*count($this->images);
-    $params['sprites'] = count($this->images);
-    file_put_contents($this->path.'sprite_info.json', json_encode($params));
-  }
+  public function Generate($path){
+    $first = imagecreatefrompng($this->frames[0]);
+    $p = [];
+    $p['width'] = imagesx($first);
+    $p['height'] = imagesy($first);
+    $first = imagescale($first, 0.2*$p[width]);
+    $p['newwidth'] = imagesx($first);
+    $p['newheight'] = imagesy($first);
+    $p['sprites'] = count($this->frames);
+    $p['spritewidth'] = $p['newwidth']*$p['sprites'];
+    file_put_contents($path.'sprite_info.json', json_encode($p));
 
-  public function SpriteGenerate(){
-    $params = json_decode(file_get_contents($this->path.'sprite_info.json'));
-    $sprite = imagecreatetruecolor($params->spritewidth, $params->newheight);
+    $sprite = imagecreatetruecolor($p['spritewidth'], $p['newheight']);
     imagesavealpha($sprite, true);
     $transparent = imagecolorallocatealpha($sprite, 0, 0, 0, 127);
     imagefill($sprite, 0, 0, $transparent);
-    foreach($this->images as $i => $image)
-      if(getimagesize($image))
-        imagecopyresampled($sprite, imagecreatefrompng($image), $i*$params->newwidth , 0, 0, 0, $params->newwidth, $params->newheight, $params->width, $params->height);
-    imagepng($sprite, $this->path.'sprite.png');
+    foreach($this->frames as $i => $image)
+      imagecopyresampled($sprite, imagecreatefrompng($image), $i*$p['newwidth'], 0, 0, 0, $p['newwidth'], $p['newheight'], $p['width'], $p['height']);
+    imagepng($sprite, $path.'sprite.png');
   }
 
-  public function GetSprite(){
+  public function GetInfo($path){
+    header('content-type: application/json');
+    echo file_get_contents($path.'sprite_info.json');
+  }
+
+  public function GetSprite($path){
     header('content-type: image/png');
-    $sprite = imagecreatefrompng($this->path.'sprite.png');
+    $sprite = imagecreatefrompng($path.'sprite.png');
     imagesavealpha($sprite, true);
     imagepng($sprite);
-  }
-
-  public function GetInfo(){
-    header('content-type: application/json');
-    echo file_get_contents($this->path.'sprite_info.json');
   }
 }
 
 $path = $_GET['path'];
-$action = $_GET['action'];
-$update = $action == 'update';
-$info = $action == 'info';
-$sprite = $action == 'sprite';
+$a = $_GET['action'];
+$update = $a == 1;
+$info = $a == 2;
+$sprite = $a == 3;
 
 if(!empty($path)){
   $generator = new SpriteGenerator($path);
-  if($update || !file_exists($path.'sprite_info.json'))
-    $generator->InfoGenerate();
-  if($update || !file_exists($path.'sprite.png'))
-    $generator->SpriteGenerate();
+  if($update || !file_exists($path.'sprite_info.json') || !file_exists($path.'sprite.png'))
+    $generator->Generate($path);
   if($sprite)
-    $generator->GetSprite();
+    $generator->GetSprite($path);
   if($info)
-    $generator->GetInfo();
+    $generator->GetInfo($path);
 }
 
 
